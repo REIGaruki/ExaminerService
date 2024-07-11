@@ -24,10 +24,9 @@ public class ExaminerServiceImpl implements ExaminerService{
         if (javaService.getAll().isEmpty()) {
             throw new RepositoryIsEmptyException("We have no questions for you yet");
         }
-        int totalAmount = javaService.getAll().size();
-        if (amount > totalAmount) {
+        if (amount > javaService.getAll().size()) {
             throw new TooBigAmountException("Try to get less questions, there are only "
-                    + totalAmount);
+                    + javaService.getAll().size());
         }
         Set<Question> randomQuestions = new HashSet<>();
         while (randomQuestions.size() < amount) {
