@@ -23,16 +23,6 @@ import java.util.stream.Stream;
 @ExtendWith(MockitoExtension.class)
 class JavaQuestionServiceTest {
     JavaQuestionService sut;
-    @BeforeEach
-    void init() {
-        List<Question> javaQuestions = new ArrayList<>(Arrays.asList(
-                new Question(QUESTION_1, ANSWER_1),
-                new Question(QUESTION_2, ANSWER_2),
-                new Question(QUESTION_3, ANSWER_3)
-        ));
-        sut = new JavaQuestionService(javaQuestions);
-    }
-
     String QUESTION_1 = "Что такое «переменная»?";
     String ANSWER_1 = "Это переменная";
     String QUESTION_2 = "По каким параметрам переменные различаются?";
@@ -41,6 +31,15 @@ class JavaQuestionServiceTest {
     String ANSWER_3 = "Типы и действия";
     String QUESTION_4 = "Новый вопрос";
     String ANSWER_4 = "Новый ответ";
+    final List<Question> javaQuestions = new ArrayList<>(Arrays.asList(
+            new Question(QUESTION_1, ANSWER_1),
+            new Question(QUESTION_2, ANSWER_2),
+            new Question(QUESTION_3, ANSWER_3)
+    ));
+    @BeforeEach
+    void init() {
+        sut = new JavaQuestionService(javaQuestions);
+    }
 
     public static Stream<Arguments> provideParamsForAddQuestionTest() {
         return Stream.of(
