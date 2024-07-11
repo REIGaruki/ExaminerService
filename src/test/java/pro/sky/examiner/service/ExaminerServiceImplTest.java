@@ -49,7 +49,6 @@ class ExaminerServiceImplTest {
     }
 
     @Test
-    @DisplayName("")
     void shouldThrowExceptionWhenAmountOfRandomQuestionsIsGreaterThanQuestionCollectionSizeOrNegativeOrZero() {
         int randomNegativeNumberOrZero = random.nextInt(Integer.MAX_VALUE) * (-1);
         when(javaQuestionServiceMock.getAll()).thenReturn(JAVA_QUESTION_LIST);
