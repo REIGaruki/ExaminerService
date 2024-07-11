@@ -85,7 +85,7 @@ public class JavaQuestionService implements QuestionService{
 
     @Override
     public Question getRandomQuestion() {
-        if (getAll().size() == 0) {
+        if (getAll().isEmpty()) {
             throw new RepositoryIsEmptyException("There are no questions for you yet");
         }
         Random random = new Random();
