@@ -6,18 +6,16 @@ import pro.sky.examiner.exception.NoArgumentException;
 import pro.sky.examiner.exception.QuestionAlreadyExistsException;
 import pro.sky.examiner.exception.QuestionNotExistException;
 import pro.sky.examiner.exception.RepositoryIsEmptyException;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Service
-@Qualifier("javaQuestionService")
+@Service(value= "javaQuestionService")
 public class JavaQuestionService implements QuestionService{
-    private List<Question> javaQuestions;
+    private List<Question> javaQuestions = new ArrayList<>();
+    private final Random random = new Random();
 
-    public JavaQuestionService(List<Question> javaQuestions) {
-        this.javaQuestions = javaQuestions;
+    public JavaQuestionService() {
     }
 
     @PostConstruct
@@ -44,38 +42,32 @@ public class JavaQuestionService implements QuestionService{
                 new Question("Что такое \"метод\"?",
                         "Сериал")
         ));
-
     }
 
     @Override
     public Question add(String question, String answer) {
         if (question == null || answer == null || question.equals("") || answer.equals("")) {
             throw new NoArgumentException("Absence of question or answer");
-        } else {
-            Question newQuestion = new Question(question, answer);
-            add(newQuestion);
-            return newQuestion;
         }
+        return add(new Question(question, answer));
     }
 
     @Override
     public Question add(Question question) {
         if (getAll().contains(question)) {
             throw new QuestionAlreadyExistsException("Question already exists");
-        } else {
-            javaQuestions.add(question);
-            return question;
         }
+        javaQuestions.add(question);
+        return question;
     }
 
     @Override
     public Question remove(Question question) {
         if (!getAll().contains(question)) {
             throw new QuestionNotExistException("Question does not exist");
-        } else {
-            javaQuestions.remove(question);
-            return question;
         }
+        javaQuestions.remove(question);
+        return question;
     }
 
     @Override
@@ -88,7 +80,6 @@ public class JavaQuestionService implements QuestionService{
         if (getAll().isEmpty()) {
             throw new RepositoryIsEmptyException("There are no questions for you yet");
         }
-        Random random = new Random();
         int randomId = random.nextInt(javaQuestions.size());
         return javaQuestions.get(randomId);
     }

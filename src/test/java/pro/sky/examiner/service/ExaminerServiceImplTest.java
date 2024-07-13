@@ -7,7 +7,6 @@ import pro.sky.examiner.exception.TooBigAmountException;
 import pro.sky.examiner.exception.TooSmallAmountException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -33,7 +32,7 @@ class ExaminerServiceImplTest {
     );
     private final int JAVA_AMOUNT = 4;
     private final int ERROR_AMOUNT = JAVA_AMOUNT + 1;
-    private List<Question> JAVA_QUESTION_LIST = new ArrayList<>();
+    private List<Question> questionList = new ArrayList<>();
 
     @Mock
     JavaQuestionService javaQuestionServiceMock;
@@ -42,19 +41,22 @@ class ExaminerServiceImplTest {
 
     @BeforeEach
     void initSut() {
-        JAVA_QUESTION_LIST.add(QUESTION_1);
-        JAVA_QUESTION_LIST.add(QUESTION_2);
-        JAVA_QUESTION_LIST.add(QUESTION_3);
-        JAVA_QUESTION_LIST.add(QUESTION_4);
+        questionList.add(QUESTION_1);
+        questionList.add(QUESTION_2);
+        questionList.add(QUESTION_3);
+        questionList.add(QUESTION_4);
     }
 
     @Test
-    void shouldThrowExceptionWhenAmountOfRandomQuestionsIsGreaterThanQuestionCollectionSizeOrNegativeOrZero() {
+    void shouldThrowExceptionWhenAmountOfRandomQuestionsIsNegativeOrZero() {
         int randomNegativeNumberOrZero = random.nextInt(Integer.MAX_VALUE) * (-1);
-        when(javaQuestionServiceMock.getAll()).thenReturn(JAVA_QUESTION_LIST);
-        Assertions.assertThrows(TooBigAmountException.class, () -> sut.getQuestions(ERROR_AMOUNT));
         Assertions.assertThrows(TooSmallAmountException.class,
                 () -> sut.getQuestions(randomNegativeNumberOrZero));
+    }
+    @Test
+    void shouldThrowExceptionWhenAmountOfRandomQuestionsIsGreaterThanQuestionCollectionSize() {
+        when(javaQuestionServiceMock.getAll()).thenReturn(questionList);
+        Assertions.assertThrows(TooBigAmountException.class, () -> sut.getQuestions(ERROR_AMOUNT));
     }
     @Test
     void shouldThrowExceptionWhenThereAreNoQuestions() {
@@ -71,7 +73,7 @@ class ExaminerServiceImplTest {
                 QUESTION_3,
                 QUESTION_4
         );
-        when(javaQuestionServiceMock.getAll()).thenReturn(JAVA_QUESTION_LIST);
+        when(javaQuestionServiceMock.getAll()).thenReturn(questionList);
         Set<Question> expected = new HashSet<>();
         expected.add(QUESTION_1);
         expected.add(QUESTION_2);

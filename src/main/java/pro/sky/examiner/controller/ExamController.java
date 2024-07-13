@@ -10,7 +10,7 @@ import java.util.Collection;
 
 @RestController
 public class ExamController {
-    ExaminerService examinerService;
+    private final ExaminerService examinerService;
 
     public ExamController(ExaminerService examinerService) {
         this.examinerService = examinerService;

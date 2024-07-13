@@ -10,8 +10,7 @@ import pro.sky.examiner.exception.QuestionAlreadyExistsException;
 import pro.sky.examiner.exception.QuestionNotExistException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+import pro.sky.examiner.exception.RepositoryIsEmptyException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +19,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 
-@ExtendWith(MockitoExtension.class)
 class JavaQuestionServiceTest {
     JavaQuestionService sut;
     String QUESTION_1 = "Что такое «переменная»?";
@@ -31,14 +29,12 @@ class JavaQuestionServiceTest {
     String ANSWER_3 = "Типы и действия";
     String QUESTION_4 = "Новый вопрос";
     String ANSWER_4 = "Новый ответ";
-    final List<Question> javaQuestions = new ArrayList<>(Arrays.asList(
-            new Question(QUESTION_1, ANSWER_1),
-            new Question(QUESTION_2, ANSWER_2),
-            new Question(QUESTION_3, ANSWER_3)
-    ));
     @BeforeEach
     void init() {
-        sut = new JavaQuestionService(javaQuestions);
+        sut = new JavaQuestionService();
+        sut.add(new Question(QUESTION_1, ANSWER_1));
+        sut.add(new Question(QUESTION_2, ANSWER_2));
+        sut.add(new Question(QUESTION_3, ANSWER_3));
     }
 
     public static Stream<Arguments> provideParamsForAddQuestionTest() {
@@ -93,9 +89,8 @@ class JavaQuestionServiceTest {
     }
     @Test
     void shouldReturnSameRemovedQuestion() {
-        Question removedQuestion = new Question(QUESTION_1, ANSWER_1);
-        Question expected = removedQuestion;
-        Question actual = sut.remove(removedQuestion);
+        Question expected = new Question(QUESTION_1, ANSWER_1);
+        Question actual = sut.remove(expected);
         Assertions.assertEquals(expected, actual);
     }
     @Test
@@ -106,12 +101,11 @@ class JavaQuestionServiceTest {
 
     @Test
     void shouldGetAllQuestions() {
-        List<Question> javaQuestions = new ArrayList<>(Arrays.asList(
+        List<Question> expected = new ArrayList<>(Arrays.asList(
                 new Question(QUESTION_1, ANSWER_1),
                 new Question(QUESTION_2, ANSWER_2),
                 new Question(QUESTION_3, ANSWER_3)
         ));
-        List<Question> expected = javaQuestions;
         Collection<Question> actual = sut.getAll();
         Assertions.assertEquals(expected, actual);
     }
@@ -120,6 +114,14 @@ class JavaQuestionServiceTest {
     void shouldReturnRandomQuestionFromPoolOfJavaQuestions() {
         Question randomQuestion = sut.getRandomQuestion();
         Assertions.assertTrue(sut.getAll().contains(randomQuestion));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenRepositoryIsEmpty() {
+        sut.remove(new Question(QUESTION_1, ANSWER_1));
+        sut.remove(new Question(QUESTION_2, ANSWER_2));
+        sut.remove(new Question(QUESTION_3, ANSWER_3));
+        Assertions.assertThrows(RepositoryIsEmptyException.class, ()-> sut.getRandomQuestion());
     }
 
 }
