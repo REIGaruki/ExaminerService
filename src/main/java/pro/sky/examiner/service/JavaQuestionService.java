@@ -46,14 +46,12 @@ public class JavaQuestionService implements QuestionService{
 
     @Override
     public Question add(String question, String answer) {
-        if (question == null || answer == null || question.equals("") || answer.equals("")) {
-            throw new NoArgumentException("Absence of question or answer");
-        }
         return add(new Question(question, answer));
     }
 
     @Override
     public Question add(Question question) {
+        checkIfQuestionOrAnswerIsEmpty(question);
         if (getAll().contains(question)) {
             throw new QuestionAlreadyExistsException("Question already exists");
         }
@@ -63,11 +61,18 @@ public class JavaQuestionService implements QuestionService{
 
     @Override
     public Question remove(Question question) {
+        checkIfQuestionOrAnswerIsEmpty(question);
         if (!getAll().contains(question)) {
             throw new QuestionNotExistException("Question does not exist");
         }
         javaQuestions.remove(question);
         return question;
+    }
+    private void checkIfQuestionOrAnswerIsEmpty(Question question) {
+        if (question.getQuestion() == null || question.getAnswer() == null ||
+                question.getAnswer().isEmpty() || question.getQuestion().isEmpty()) {
+            throw new NoArgumentException("Absence of question or answer");
+        }
     }
 
     @Override

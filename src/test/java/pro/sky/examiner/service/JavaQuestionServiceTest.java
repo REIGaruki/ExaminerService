@@ -49,6 +49,7 @@ class JavaQuestionServiceTest {
     @MethodSource("provideParamsForAddQuestionTest")
     void shouldThrowExceptionWhenThereAreNoQuestionOrAnswer(String questi0n, String answer) {
         Assertions.assertThrows(NoArgumentException.class, () -> sut.add(questi0n, answer));
+        Assertions.assertThrows(NoArgumentException.class, () -> sut.remove(new Question(questi0n, answer)));
     }
     @Test
     void shouldAddQuestionCorrectly() {
