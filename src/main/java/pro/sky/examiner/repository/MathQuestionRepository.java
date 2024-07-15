@@ -15,15 +15,12 @@ import java.util.Random;
 
 @Repository("mathQuestionRepository")
 public class MathQuestionRepository implements QuestionRepository{
-    private List<Question> mathQuestions = new ArrayList<>();
+    private final List<Question> mathQuestions = new ArrayList<>();
     private final Random random = new Random();
-
-    public MathQuestionRepository() {
-    }
 
     @PostConstruct
     public void init() {
-        this.mathQuestions = new ArrayList<>(Arrays.asList(
+        this.mathQuestions.addAll(new ArrayList<>(Arrays.asList(
                 new Question("2 * 2?",
                         "4"),
                 new Question("99 + 1?",
@@ -44,7 +41,7 @@ public class MathQuestionRepository implements QuestionRepository{
                         "-900"),
                 new Question("19456 * 0?",
                         "0")
-        ));
+        )));
     }
 
     @Override

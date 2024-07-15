@@ -12,15 +12,12 @@ import java.util.*;
 
 @Repository("javaQuestionRepository")
 public class JavaQuestionRepository implements QuestionRepository{
-    private List<Question> javaQuestions = new ArrayList<>();
+    private final List<Question> javaQuestions = new ArrayList<>();
     private final Random random = new Random();
-
-    public JavaQuestionRepository() {
-    }
 
     @PostConstruct
     public void init() {
-        this.javaQuestions = new ArrayList<>(Arrays.asList(
+        this.javaQuestions.addAll(new ArrayList<>(Arrays.asList(
                 new Question("Что такое «переменная»?",
                         "Это переменная"),
                 new Question("По каким параметрам переменные различаются?",
@@ -41,7 +38,7 @@ public class JavaQuestionRepository implements QuestionRepository{
                         "ЧТо они масивные"),
                 new Question("Что такое \"метод\"?",
                         "Сериал")
-        ));
+        )));
     }
 
     @Override
