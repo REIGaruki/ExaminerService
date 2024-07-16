@@ -46,21 +46,20 @@ class ExaminerServiceImplTest {
     @Mock
     QuestionService mathQuestionServiceMock;
     ExaminerServiceImpl sut;
-
+    private List<Question> javaQuestions;
+    private List<Question> mathQuestions;
     @BeforeEach
     void initSut() {
         sut = new ExaminerServiceImpl(javaQuestionServiceMock, mathQuestionServiceMock);
-        List<Question> javaQuestions = new ArrayList<>();
+        javaQuestions = new ArrayList<>();
         javaQuestions.add(QUESTION_1);
         javaQuestions.add(QUESTION_2);
         javaQuestions.add(QUESTION_3);
         javaQuestions.add(QUESTION_4);
-        List<Question> mathQuestions = new ArrayList<>();
+        mathQuestions = new ArrayList<>();
         mathQuestions.add(QUESTION_5);
         mathQuestions.add(QUESTION_6);
         mathQuestions.add(QUESTION_7);
-        when(javaQuestionServiceMock.getAll()).thenReturn(javaQuestions);
-        when(mathQuestionServiceMock.getAll()).thenReturn(mathQuestions);
     }
 
     @Test
@@ -71,6 +70,8 @@ class ExaminerServiceImplTest {
     }
     @Test
     void shouldThrowExceptionWhenAmountOfRandomQuestionsIsGreaterThanQuestionCollectionSize() {
+        when(javaQuestionServiceMock.getAll()).thenReturn(javaQuestions);
+        when(mathQuestionServiceMock.getAll()).thenReturn(mathQuestions);
         Assertions.assertThrows(TooBigAmountException.class, () -> sut.getQuestions(ERROR_AMOUNT));
     }
     @Test
@@ -83,6 +84,8 @@ class ExaminerServiceImplTest {
     }
     @Test
     void shouldReturnAmountOfUniqueQuestions() {
+        when(javaQuestionServiceMock.getAll()).thenReturn(javaQuestions);
+        when(mathQuestionServiceMock.getAll()).thenReturn(mathQuestions);
         when(javaQuestionServiceMock.getRandomQuestion()).thenReturn(
                 QUESTION_1,
                 QUESTION_1,
