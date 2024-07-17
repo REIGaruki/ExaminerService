@@ -38,7 +38,6 @@ class ExaminerServiceImplTest {
     QuestionService mathQuestionServiceMock;
     ExaminerServiceImpl sut;
     private List<Question> javaQuestions;
-    private List<Question> mathQuestions;
     @BeforeEach
     void initSut() {
         List<QuestionService> services = new ArrayList<>(List.of(javaQuestionServiceMock,mathQuestionServiceMock));
@@ -79,6 +78,12 @@ class ExaminerServiceImplTest {
                 QUESTION_3,
                 QUESTION_1,
                 QUESTION_2,
+                QUESTION_4
+        );
+        when(mathQuestionServiceMock.getRandomQuestion()).thenReturn(
+                QUESTION_1,
+                QUESTION_2,
+                QUESTION_3,
                 QUESTION_4
         );
         Set<Question> expected = new HashSet<>();

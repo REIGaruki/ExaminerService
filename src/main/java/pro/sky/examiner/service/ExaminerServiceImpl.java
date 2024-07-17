@@ -10,6 +10,7 @@ import java.util.*;
 
 @Service
 public class ExaminerServiceImpl implements ExaminerService{
+    Random random = new Random();
     private final List<QuestionService> services;
     public ExaminerServiceImpl(List<QuestionService> services) {
         this.services = services;
@@ -27,15 +28,14 @@ public class ExaminerServiceImpl implements ExaminerService{
             throw new TooBigAmountException("Try to get less questions, there are only "
                     + totalAmount);
         }
-        int mathQuestionAmount;
+        int javaQuestionAmount;
         Set<Question> randomQuestions = new HashSet<>();
-        Random random = new Random();
-        mathQuestionAmount = random.nextInt(amount);
-        while (randomQuestions.size() < mathQuestionAmount) {
-            randomQuestions.add(services.get(1).getRandomQuestion());
+        javaQuestionAmount = random.nextInt(amount);
+        while (randomQuestions.size() < javaQuestionAmount) {
+            randomQuestions.add(services.get(0).getRandomQuestion());
         }
         while (randomQuestions.size() < amount) {
-            randomQuestions.add(services.get(0).getRandomQuestion());
+            randomQuestions.add(services.get(1).getRandomQuestion());
         }
         return randomQuestions;
     }
