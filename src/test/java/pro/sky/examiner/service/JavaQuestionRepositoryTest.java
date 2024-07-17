@@ -70,9 +70,10 @@ public class JavaQuestionRepositoryTest {
         Question expected = new Question(QUESTION_4, ANSWER_4);
         Question actual = sut.add(expected);
         Assertions.assertEquals(expected, actual);
+        Assertions.assertTrue(sut.getAll().contains(expected));
     }
     @Test
-    void shoudThrowExceptionIfQuestionIsAlreadyAdded() {
+    void shouldThrowExceptionIfQuestionIsAlreadyAdded() {
         Assertions.assertThrows(QuestionAlreadyExistsException.class,
                 () -> sut.add(new Question(QUESTION_1, ANSWER_1)
                 ));
@@ -94,6 +95,7 @@ public class JavaQuestionRepositoryTest {
         Question expected = new Question(QUESTION_1, ANSWER_1);
         Question actual = sut.remove(expected);
         Assertions.assertEquals(expected, actual);
+        Assertions.assertFalse(sut.getAll().contains(expected));
     }
     @Test
     void shouldThrowExceptionWhenRemoveQuestionThatDoesNotExist() {

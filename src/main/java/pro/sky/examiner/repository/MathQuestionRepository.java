@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-@Repository("mathQuestionRepository")
+@Repository
 public class MathQuestionRepository implements QuestionRepository{
     private final List<Question> mathQuestions = new ArrayList<>();
     private final Random random = new Random();

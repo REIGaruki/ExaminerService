@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
-@Repository("javaQuestionRepository")
+@Repository
 public class JavaQuestionRepository implements QuestionRepository{
     private final List<Question> javaQuestions = new ArrayList<>();
     private final Random random = new Random();
