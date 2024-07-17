@@ -28,17 +28,8 @@ class ExaminerServiceImplTest {
     private final Question QUESTION_4 = new Question("Q4?",
             "A4"
     );
-    private final Question QUESTION_5 = new Question("Q5?",
-            "A5"
-    );
-    private final Question QUESTION_6 = new Question("Q6?",
-            "A6");
-    private final Question QUESTION_7 = new Question("Q7?",
-            "A7");
     private final int JAVA_AMOUNT = 4;
-    private final int MATH_AMOUNT = 3;
-    private final int TOTAL_AMOUNT = MATH_AMOUNT + JAVA_AMOUNT;
-    private final int ERROR_AMOUNT = TOTAL_AMOUNT + 1;
+    private final int ERROR_AMOUNT = JAVA_AMOUNT + 1;
     private final Random random = new Random();
 
     @Mock
@@ -50,16 +41,13 @@ class ExaminerServiceImplTest {
     private List<Question> mathQuestions;
     @BeforeEach
     void initSut() {
-        sut = new ExaminerServiceImpl(javaQuestionServiceMock, mathQuestionServiceMock);
+        List<QuestionService> services = new ArrayList<>(List.of(javaQuestionServiceMock,mathQuestionServiceMock));
+        sut = new ExaminerServiceImpl(services);
         javaQuestions = new ArrayList<>();
         javaQuestions.add(QUESTION_1);
         javaQuestions.add(QUESTION_2);
         javaQuestions.add(QUESTION_3);
         javaQuestions.add(QUESTION_4);
-        mathQuestions = new ArrayList<>();
-        mathQuestions.add(QUESTION_5);
-        mathQuestions.add(QUESTION_6);
-        mathQuestions.add(QUESTION_7);
     }
 
     @Test
@@ -71,13 +59,11 @@ class ExaminerServiceImplTest {
     @Test
     void shouldThrowExceptionWhenAmountOfRandomQuestionsIsGreaterThanQuestionCollectionSize() {
         when(javaQuestionServiceMock.getAll()).thenReturn(javaQuestions);
-        when(mathQuestionServiceMock.getAll()).thenReturn(mathQuestions);
         Assertions.assertThrows(TooBigAmountException.class, () -> sut.getQuestions(ERROR_AMOUNT));
     }
     @Test
     void shouldThrowExceptionWhenThereAreNoQuestions() {
         when(javaQuestionServiceMock.getAll()).thenReturn(new ArrayList<>());
-        when(mathQuestionServiceMock.getAll()).thenReturn(new ArrayList<>());
         int randomPositiveNumber = random.nextInt(Integer.MAX_VALUE) + 1;
         Assertions.assertThrows(RepositoryIsEmptyException.class,
                 () -> sut.getQuestions(randomPositiveNumber));
@@ -85,7 +71,6 @@ class ExaminerServiceImplTest {
     @Test
     void shouldReturnAmountOfUniqueQuestions() {
         when(javaQuestionServiceMock.getAll()).thenReturn(javaQuestions);
-        when(mathQuestionServiceMock.getAll()).thenReturn(mathQuestions);
         when(javaQuestionServiceMock.getRandomQuestion()).thenReturn(
                 QUESTION_1,
                 QUESTION_1,
@@ -96,22 +81,12 @@ class ExaminerServiceImplTest {
                 QUESTION_2,
                 QUESTION_4
         );
-        when(mathQuestionServiceMock.getRandomQuestion()).thenReturn(
-                QUESTION_5,
-                QUESTION_6,
-                QUESTION_6,
-                QUESTION_5,
-                QUESTION_7
-        );
         Set<Question> expected = new HashSet<>();
         expected.add(QUESTION_1);
         expected.add(QUESTION_2);
         expected.add(QUESTION_3);
         expected.add(QUESTION_4);
-        expected.add(QUESTION_5);
-        expected.add(QUESTION_6);
-        expected.add(QUESTION_7);
-        Collection<Question> actual = sut.getQuestions(TOTAL_AMOUNT);
+        Collection<Question> actual = sut.getQuestions(JAVA_AMOUNT);
         Assertions.assertEquals(expected, actual);
     }
 
