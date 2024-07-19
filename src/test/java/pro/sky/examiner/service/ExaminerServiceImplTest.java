@@ -61,13 +61,6 @@ class ExaminerServiceImplTest {
         Assertions.assertThrows(TooBigAmountException.class, () -> sut.getQuestions(ERROR_AMOUNT));
     }
     @Test
-    void shouldThrowExceptionWhenThereAreNoQuestions() {
-        when(javaQuestionServiceMock.getAll()).thenReturn(new ArrayList<>());
-        int randomPositiveNumber = random.nextInt(Integer.MAX_VALUE) + 1;
-        Assertions.assertThrows(RepositoryIsEmptyException.class,
-                () -> sut.getQuestions(randomPositiveNumber));
-    }
-    @Test
     void shouldReturnAmountOfUniqueQuestions() {
         when(javaQuestionServiceMock.getAll()).thenReturn(javaQuestions);
         when(javaQuestionServiceMock.getRandomQuestion()).thenReturn(
