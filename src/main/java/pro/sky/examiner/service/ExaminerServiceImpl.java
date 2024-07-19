@@ -1,7 +1,6 @@
 package pro.sky.examiner.service;
 
 import pro.sky.examiner.domain.Question;
-import pro.sky.examiner.exception.RepositoryIsEmptyException;
 import pro.sky.examiner.exception.TooBigAmountException;
 import pro.sky.examiner.exception.TooSmallAmountException;
 import org.springframework.stereotype.Service;
@@ -10,7 +9,7 @@ import java.util.*;
 
 @Service
 public class ExaminerServiceImpl implements ExaminerService{
-    Random random = new Random();
+    private final Random random = new Random();
     private final List<QuestionService> services;
     public ExaminerServiceImpl(List<QuestionService> services) {
         this.services = services;
@@ -20,7 +19,7 @@ public class ExaminerServiceImpl implements ExaminerService{
         if (amount <= 0) {
             throw new TooSmallAmountException("You must get at least one question");
         }
-        int totalAmount = 0;
+        int totalAmount;
         try {
             totalAmount = services.get(0).getAll().size();
         } catch (RuntimeException e) {
